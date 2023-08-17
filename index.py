@@ -44,7 +44,25 @@ def main(*args):
                 messages.extend(res)
         else:
             pushMessage(res, push)
-
+        # --------------------  原项目自修改: Bark推送 -------------------
+        bark_title = "时光相册签到"
+        bar_url = "https://<地址>/<token>/"
+        try:
+            bark_false = res[0]['txt']['content']
+        except KeyError:
+            try:
+                bark_success = f"执行结果: {res[2]['txt']['content']}"
+            except Exception as e:
+                print('其他错误: ', e)
+            else:
+                resp = requests.get(url=f"{bar_url}{bark_title}/{bark_success}?group=ServerCron")
+                resp.close()
+                print("签到成功!")
+        else:
+            resp = requests.get(url=f"{bar_url}{bark_title}/{bark_false}?group=ServerCron")
+            resp.close()
+            print("签到失败!")
+    # -------------- 自定义结束 --------------------------
     if len(messages) != 0 and push_together is not None:
         pushMessage(messages, push_together)
 
